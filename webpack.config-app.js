@@ -5,21 +5,14 @@ const {CleanWebpackPlugin} = require('clean-webpack-plugin')
 const path = require('path');
 const webpack = require('webpack');
 
-const BUILD_FOLDER = "lib/"
+const BUILD_FOLDER = "dist/"
 
 module.exports = {
-  // context: path.resolve(__dirname, "src"),
-  entry: './src/XmlViewer.js',
-  externals: {
-    react: "React",
-    "react-dom": "ReactDOM"
-  },
+  context: path.resolve(__dirname, "test"),
+  entry: './App.js',
   output: {
     path: path.resolve(__dirname, BUILD_FOLDER),
-    filename: 'XmlViewer.js',
-    library: "react-xml-view",
-    libraryTarget: 'umd',
-    umdNamedDefine: true,
+    filename: '[name].js',
     sourceMapFilename: '[file].map'
   },
   module: {
@@ -52,13 +45,13 @@ module.exports = {
     //   {from: 'icon.png'}, 
     //   {from: 'manifest.json'},
     // ]),
-    // new webpack.SourceMapDevToolPlugin({
-    //   filename: '[name].js.map',
-    // }),
+    new webpack.SourceMapDevToolPlugin({
+      filename: '[name].js.map',
+    }),
     new CleanWebpackPlugin(),
-    // new HtmlWebPackPlugin({
-    //   template: "./src/index.html",
-    //   filename: "./index.html"
-    // })   
+    new HtmlWebPackPlugin({
+      template: "./index.html",
+      filename: "./index.html"
+    })   
   ]
 }

@@ -2,8 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import './App.css';
-import XmlViewer from "./XmlViewer.js"
-import manifest from "./manifest_exp.js"
+import XmlViewer from "../lib/XmlViewer.js"
 import xml_exp from "./xml_exp.js"
 
 
@@ -12,6 +11,7 @@ class App extends React.Component {
         return (
             <div>
                 <XmlViewer src={xml_exp}/>
+                {/* <h1>Hello world</h1> */}
             </div>
         )
     }
