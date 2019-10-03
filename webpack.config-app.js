@@ -40,15 +40,14 @@ module.exports = {
     ]
   },
   plugins: [
-    // new CopyWebpackPlugin([
-    //   {from: '*.html'},
-    //   {from: 'icon.png'}, 
-    //   {from: 'manifest.json'},
-    // ]),
+    new CleanWebpackPlugin(),
     new webpack.SourceMapDevToolPlugin({
       filename: '[name].js.map',
     }),
-    new CleanWebpackPlugin(),
+    // new CopyWebpackPlugin([
+    //   {from: '*.html'},
+    //   {from: 'icon.png'}, 
+    // ]),
     new HtmlWebPackPlugin({
       template: "./index.html",
       filename: "./index.html"

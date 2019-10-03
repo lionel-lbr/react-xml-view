@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Styles from "./Styles.js"
 
 const processElt = (eltNode) => {
@@ -13,148 +13,125 @@ const processElt = (eltNode) => {
   return elt
 }
 
-class XmlElt extends React.Component {
+function XmlElt({eltName, eltValue, eltAtt, eltChildren}) {
 
-  constructor(props) {
-    super(props)
+  const [openState, setOpenState] = useState(true)
 
-    this.state = { open: true }
-    this.eltName = props.eltName
-    this.eltValue = props.eltValue
-    this.eltAtt = props.eltAtt
-    this.eltChildren = props.eltChildren
-
-    this.toggle = this.toggle.bind(this)
+  function toggle() {
+    setOpenState(!openState)
   }
 
-  toggle() {
-    this.setState({open: !this.state.open })
-  }
+  var eltOpenTag = <div style={Styles.xmlopenclosetag}>{"<"+eltName}</div>
+  var eltOpenTagTrailer = ""
+  var eltAttStr = ""
+  var eltValueOrChild = ""
+  var eltCloseTag = ""
 
-  render() {
-    var eltOpenTag = <div style={Styles.xmlopenclosetag}>{"<"+this.eltName}</div>
-    var eltOpenTagTrailer = ""
-    var eltAtt = ""
-    var eltValueOrChild = ""
-    var eltCloseTag = ""
+  // simple html tag, no attributes or children, display as one row/line
+  if (eltValue && eltChildren.length === 0 && eltAtt.length ===0) {
+    eltOpenTagTrailer = <div style={Styles.xmlopenclosetag}>{">"}</div>
+    eltValueOrChild = <div>{eltValue}</div>
+    eltCloseTag = <div style={Styles.xmlopenclosetag}>{"</"+eltName+">"}</div>
 
-    // simple html tag, no attributes or children, display as one row/line
-    if (this.eltValue && this.eltChildren.length === 0 && this.eltAtt.length ===0) {
-      eltOpenTagTrailer = <div style={Styles.xmlopenclosetag}>{">"}</div>
-      eltValueOrChild = <div>{this.eltValue}</div>
-      eltCloseTag = <div style={Styles.xmlopenclosetag}>{"</"+this.eltName+">"}</div>
+    return (
+      <div style={Styles.simplexmlelt}>
+        {eltOpenTag}{eltOpenTagTrailer}{eltValueOrChild}{eltCloseTag}
+      </div>
+    )
+  } 
 
+  if (eltAtt.length > 0) {
+    eltAttStr = eltAtt.map(att => {
       return (
-        <div style={Styles.simplexmlelt}>
-          {eltOpenTag}{eltOpenTagTrailer}{eltValueOrChild}{eltCloseTag}
-        </div>
-      )
-    } 
-
-    if (this.eltAtt.length > 0) {
-      eltAtt = this.eltAtt.map(att => {return(
         <div style={Styles.headerelt}>
           <div style={Styles.xmlattname}>{att.nodeName}</div>
           <div style={Styles.xmlattvalue}>{'="'+att.nodeValue+'"'}</div>
-        </div>)});
-    }
-
-    // only attributes, no children, display as one row/line
-    if (this.eltValue==null && this.eltChildren.length === 0) {
-      eltOpenTagTrailer = <div style={Styles.xmlopenclosetag}>{"/>"}</div>
-
-      return (
-        <div style={Styles.simplexmlelt}>
-          {eltOpenTag}{eltAtt}{eltOpenTagTrailer}
-        </div>
-      )
-    }
-
-    // process close state, don't display children
-    if (!this.state.open) {
-      eltOpenTagTrailer = <div style={Styles.xmlopenclosetag}>{">"}</div>
-      eltCloseTag = <div style={Styles.xmlopenclosetag}>{"</"+this.eltName+">"}</div>
-
-      return (
-        <div style={Styles.xmleltclose}>
-          <div style={Styles.arrowBox}>
-            <div style={Styles.arrowRight} onClick={this.toggle}/>
-          </div>
-          {eltOpenTag}{eltAtt}{eltOpenTagTrailer}<div style={Object.assign({}, Styles.headerelt, {background: "lightgreen", color: "purple"})}>{"...  "}</div>{eltCloseTag}
-        </div>
-      )
-    }
-
-    if (this.eltValue || this.eltChildren.length > 0) {
-      eltOpenTagTrailer = <div>{">"}</div>
-      let allchild = this.eltChildren.map(eltNode => {
-        var elt = processElt(eltNode)
-        return (<XmlElt eltName={elt.name} eltAtt={elt.attr} eltChildren={elt.children} eltValue={elt.value}/>)
-      })
-      eltValueOrChild = <div style={Styles.xmleltopen}>{this.eltValue}{allchild}</div>
-      eltCloseTag = <div style={Styles.xmlopenclosetag}>{"</"+this.eltName+">"}</div>
-
-    } else {
-      // no value and no children
-      eltOpenTagTrailer = <div style={Styles.xmlopenclosetag}>{"/>"}</div>
-    }
-    // }
-
-    return (
-
-        <div style={Styles.xmleltopen}>  
-          <div style={Styles.xmleltheader}>
-            <div style={Styles.arrowBox}><div style={Styles.arrowDown} onClick={this.toggle}/></div>
-            {eltOpenTag}
-            {eltAtt}
-            {eltOpenTagTrailer}
-          </div> 
-          <div style={Styles.xmleltbody}>
-            {eltValueOrChild}
-          </div> 
-          <div style={Styles.xmleltfooter}>
-            {eltCloseTag}
-          </div>
-        </div>
-    )
-  }
-}
-
-
-class XmlViewer extends React.Component {
- 
-  constructor(props) {
-    super(props)
-
-    this.allChildren = []
-    this.parseSrc = this.parseSrc.bind(this)
-
-    this.parseSrc(this.props.src)
+        </div>)
+        });
   }
 
-  // componentWillMount() {
-  //   this.parseSrc(this.props.src)
-  // }
-  render() {
+  // only attributes, no children, display as one row/line
+  if (eltValue==null && eltChildren.length === 0) {
+    eltOpenTagTrailer = <div style={Styles.xmlopenclosetag}>{"/>"}</div>
+
     return (
-      <div style={Styles.xmlviewer}>
-        {
-          this.allChildren.map(eltNode => {
-              var elt = processElt(eltNode)
-              return (<XmlElt eltName={elt.name} eltAtt={elt.attr} eltChildren={elt.children} eltValue={elt.value}/>)
-            })
-        }
+      <div style={Styles.simplexmlelt}>
+        {eltOpenTag}{eltAttStr}{eltOpenTagTrailer}
       </div>
     )
   }
 
-  parseSrc(src) {
+  // process close state, don't display children
+  if (!openState) {
+    eltOpenTagTrailer = <div style={Styles.xmlopenclosetag}>{">"}</div>
+    eltCloseTag = <div style={Styles.xmlopenclosetag}>{"</"+eltName+">"}</div>
+
+    return (
+      <div style={Styles.xmleltclose}>
+        <div style={Styles.arrowBox}>
+          <div style={Styles.arrowRight} onClick={toggle}/>
+        </div>
+        {eltOpenTag}{eltAttStr}{eltOpenTagTrailer}<div style={Object.assign({}, Styles.headerelt, {background: "lightgreen", color: "purple"})}>{"...  "}</div>{eltCloseTag}
+      </div>
+    )
+  }
+
+  if (eltValue || eltChildren.length > 0) {
+    eltOpenTagTrailer = <div>{">"}</div>
+    let allchild = eltChildren.map(eltNode => {
+      var elt = processElt(eltNode)
+      return (<XmlElt eltName={elt.name} eltAtt={elt.attr} eltChildren={elt.children} eltValue={elt.value}/>)
+    })
+    eltValueOrChild = <div style={Styles.xmleltopen}>{eltValue}{allchild}</div>
+    eltCloseTag = <div style={Styles.xmlopenclosetag}>{"</"+eltName+">"}</div>
+
+  } else {
+    // no value and no children
+    eltOpenTagTrailer = <div style={Styles.xmlopenclosetag}>{"/>"}</div>
+  }
+  // }
+
+  return (
+
+    <div style={Styles.xmleltopen}>  
+      <div style={Styles.xmleltheader}>
+        <div style={Styles.arrowBox}><div style={Styles.arrowDown} onClick={toggle}/></div>
+        {eltOpenTag}
+        {eltAttStr}
+        {eltOpenTagTrailer}
+      </div> 
+      <div style={Styles.xmleltbody}>
+        {eltValueOrChild}
+      </div> 
+      <div style={Styles.xmleltfooter}>
+        {eltCloseTag}
+      </div>
+    </div>
+  )
+}
+
+
+function XmlViewer({src}) {
+
+  function parseSrc(src) {
     let d = new DOMParser()
     let doc = d.parseFromString(src, 'application/xml')
     // convert the HTMLCollection to an array.
-    this.allChildren = [].slice.call(doc.children)
+    return [].slice.call(doc.children)
   } 
-}
 
+  var allChildren = parseSrc(src)
+
+  return (
+    <div style={Styles.xmlviewer}>
+      {
+        allChildren.map(eltNode => {
+            var elt = processElt(eltNode)
+            return (<XmlElt eltName={elt.name} eltAtt={elt.attr} eltChildren={elt.children} eltValue={elt.value}/>)
+          })
+      }
+    </div>
+  )
+}
 
 export default XmlViewer;

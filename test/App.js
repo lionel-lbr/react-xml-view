@@ -1,22 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import './App.css';
-import XmlViewer from "../lib/XmlViewer.js"
-import xml_exp from "./xml_exp.js"
+import XmlViewer from "../src/XmlViewer.js"
+import xml_exp1 from "./xml_exp.js"
+import xml_exp2 from "./xml_exp2.js"
 
+var xml_exp = [xml_exp1, xml_exp2]
 
-class App extends React.Component {
-    render() {
-        return (
-            <div>
-                <XmlViewer src={xml_exp}/>
-                {/* <h1>Hello world</h1> */}
-            </div>
-        )
-    }
+const ButtonBar = ({onClickHandler}) => {
+    return (
+        <div>
+            <button type="button" onClick={() => onClickHandler(0)}>Xml 1</button> 
+            <button type="button" onClick={() => onClickHandler(1)}>Xml 2</button> 
+        </div>
+    )
 }
 
-export default App;
+function App() {
+
+    // const [xmlFileId, setXmlFileId] = useState(0);
+    const [theSrc, setTheSrc] = useState(xml_exp[0])
+
+    function changeXmlSrc(id) {
+        setTheSrc(xml_exp[id])
+    }
+
+    return (
+        <div>
+            <ButtonBar onClickHandler={changeXmlSrc}/>
+            <XmlViewer src={theSrc}/>
+        </div>
+    )    
+}
 
 ReactDOM.render(<App/>, document.getElementById('root'))

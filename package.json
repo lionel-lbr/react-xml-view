@@ -1,10 +1,11 @@
 {
   "name": "react-xml-view",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "buildlib": "webpack --config webpack.config.js --mode production",
+    "debuglib": "webpack --config webpack.config.js --mode development --watch",
     "buildapp": "webpack --config webpack.config-app.js --mode development",
     "start": "webpack-dev-server --config webpack.config-app.js --mode development --open"
   },

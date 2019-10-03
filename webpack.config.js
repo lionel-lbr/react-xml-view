@@ -8,15 +8,15 @@ const webpack = require('webpack');
 const BUILD_FOLDER = "lib/"
 
 module.exports = {
-  // context: path.resolve(__dirname, "src"),
-  entry: './src/XmlViewer.js',
+  context: path.resolve(__dirname, "src"),
+  entry: './index.js',
   externals: {
     react: "React",
     "react-dom": "ReactDOM"
   },
   output: {
     path: path.resolve(__dirname, BUILD_FOLDER),
-    filename: 'XmlViewer.js',
+    filename: 'index.js',
     library: "react-xml-view",
     libraryTarget: 'umd',
     umdNamedDefine: true,
@@ -55,7 +55,7 @@ module.exports = {
     // new webpack.SourceMapDevToolPlugin({
     //   filename: '[name].js.map',
     // }),
-    new CleanWebpackPlugin(),
+    // new CleanWebpackPlugin(),
     // new HtmlWebPackPlugin({
     //   template: "./src/index.html",
     //   filename: "./index.html"
