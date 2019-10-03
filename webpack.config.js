@@ -11,8 +11,7 @@ module.exports = {
   context: path.resolve(__dirname, "src"),
   entry: './index.js',
   externals: {
-    react: "React",
-    "react-dom": "ReactDOM"
+    react: "react",
   },
   output: {
     path: path.resolve(__dirname, BUILD_FOLDER),

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import './App.css';
-import XmlViewer from "../src/XmlViewer.js"
+import XmlViewer from "../lib"
 import xml_exp1 from "./xml_exp.js"
 import xml_exp2 from "./xml_exp2.js"
 
