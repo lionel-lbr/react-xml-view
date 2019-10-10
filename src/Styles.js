@@ -4,7 +4,7 @@ styles.xmlviewer = {
   height: "100%",
   display: "flex",
   flexDirection: "column",
-  border: "2px solid orange",
+  // border: "2px solid orange",
   fontSize: "15px",
 }
 

@@ -6,6 +6,12 @@ import XmlViewer from "../lib"
 import xml_exp1 from "./xml_exp.js"
 import xml_exp2 from "./xml_exp2.js"
 
+var styles = {}
+
+styles.app = {
+  border: "2px solid red"
+}
+
 var xml_exp = [xml_exp1, xml_exp2]
 
 const ButtonBar = ({onClickHandler}) => {
@@ -29,7 +35,7 @@ function App() {
     return (
         <div>
             <ButtonBar onClickHandler={changeXmlSrc}/>
-            <XmlViewer src={theSrc}/>
+            <XmlViewer style={styles.app} src={theSrc}/>
         </div>
     )    
 }

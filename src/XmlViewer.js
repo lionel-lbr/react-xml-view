@@ -111,7 +111,10 @@ function XmlElt({eltName, eltValue, eltAtt, eltChildren}) {
 }
 
 
-function XmlViewer({src}) {
+function XmlViewer({src, style}) {
+
+  var theStyle = {}
+  Object.assign(theStyle, Styles.xmlviewer, style)
 
   function parseSrc(src) {
     let d = new DOMParser()
@@ -123,7 +126,7 @@ function XmlViewer({src}) {
   var allChildren = parseSrc(src)
 
   return (
-    <div style={Styles.xmlviewer}>
+    <div style={theStyle}>
       {
         allChildren.map(eltNode => {
             var elt = processElt(eltNode)
